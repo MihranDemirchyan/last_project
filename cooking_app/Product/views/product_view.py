@@ -26,7 +26,7 @@ class ProductView(APIView):
 
         serializer.is_valid(raise_exception=True)
 
-        serializer.save(user=request.user)  # The problem is here in user=request.user
+        serializer.save(user=request.user)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 

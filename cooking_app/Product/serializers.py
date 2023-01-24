@@ -38,10 +38,10 @@ class ElementsModelSerializer(serializers.ModelSerializer):
         model = Elements
         fields = "__all__"
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        print(data)
-        data["product_elements"] = instance.products.data
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     print(data)
+    #     data["product_elements"] = instance.products.data
 
 
 class LikesModelSerializer(serializers.ModelSerializer):
