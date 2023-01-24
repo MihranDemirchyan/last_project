@@ -41,7 +41,6 @@ class ProductDetailView(APIView):
             return Response({"message": "not found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = ProductModelSerializer(product)
-        serializer.save(user=request.user)
 
         return Response(serializer.data)
 

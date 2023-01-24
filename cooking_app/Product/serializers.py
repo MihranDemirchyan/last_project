@@ -8,15 +8,20 @@ from Users.serializers import UserSerializer
 
 
 class ProductModelSerializer(serializers.ModelSerializer):
+    # product_name = serializers.ReadOnlyField()
+    # users = serializers.ReadOnlyField()
+    # product_elements = serializers.ReadOnlyField()
+    # cuisine = serializers.ReadOnlyField()
+    # comments = serializers.CharField(read_only=True)
 
     class Meta:
         model = Product
-        fields = ("id", "product_name", "users", "cuisine", "product_elements", "comments")
+        fields = ("id", "product_name", "user", "cuisine", "product_elements")
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        user = data.pop("users")
-        data["users"] = UserSerializer(user).data
+        print(data)
+        data["user"] = UserSerializer(instance.user).data
 
         return data
 
@@ -33,6 +38,11 @@ class ElementsModelSerializer(serializers.ModelSerializer):
         model = Elements
         fields = "__all__"
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        print(data)
+        data["product_elements"] = instance.products.data
+
 
 class LikesModelSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,6 +51,8 @@ class LikesModelSerializer(serializers.ModelSerializer):
 
 
 class CommentsModelSerializer(serializers.ModelSerializer):
+    # comments = serializers.ReadOnlyField()
+
     class Meta:
         model = Comments
         fields = "__all__"

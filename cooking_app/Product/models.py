@@ -6,24 +6,18 @@ from rest_framework import request
 
 class Product(models.Model):
     product_name = models.CharField(max_length=100)
-    users = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    cuisine = models.ForeignKey("Cuisine", on_delete=models.CASCADE)
-    product_elements = models.ForeignKey("Elements", on_delete=models.CASCADE)
-    comments = models.ForeignKey("Comments",on_delete=models.PROTECT, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    cuisine = models.ForeignKey("Cuisine", on_delete=models.CASCADE, null=True)
+    product_elements = models.ManyToManyField("Elements")
+    # comments = models.ForeignKey("Comments",on_delete=models.PROTECT, null=True)
 
     def __str__(self):
-        return f"{self.users}"
+        return f"{self.user}"
 
 
 class Elements(models.Model):
-    meat = models.TextField(null=True, blank=True)
-    sauces = models.TextField(null=True, blank=True)
-    spices = models.TextField(null=True, blank=True)
-    vegetables = models.TextField(null=True, blank=True)
-    fruits = models.TextField(null=True, blank=True)
-    grocery = models.TextField(null=True, blank=True)
-    dairy_prods = models.TextField(null=True, blank=True)
-    greens = models.TextField(null=True, blank=True)
+    name = models.CharField(max_length=50, null=True)
+    # product = models.ManyToManyField("Product")
 
 
 class Cuisine(models.Model):
@@ -40,15 +34,16 @@ class Likes(models.Model):
 
 class Comments(models.Model):
     comment = models.TextField(null=True, blank=True)
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    product = models.ManyToManyField("Product")
 
     def __str__(self):
-        return f"{self.user}"
+        return f"{self.comment}"
 
 
 class Favourite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey("Product", on_delete=models.CASCADE)
+    product = models.ManyToManyField("Product")
 
     def __str__(self):
         return f"{self.user}"
