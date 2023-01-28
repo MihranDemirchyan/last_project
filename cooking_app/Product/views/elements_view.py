@@ -65,6 +65,7 @@ class ElementsDetailView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, elements_id):
+
         self.get_elements_object(elements_id).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)

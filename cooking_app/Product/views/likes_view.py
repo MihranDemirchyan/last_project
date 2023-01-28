@@ -1,21 +1,13 @@
 from rest_framework.response import Response
-from Product.models import (
-    Elements,
-    Comments, Likes,
-    Favourite, Cuisine
-)
+from Product.models import Likes
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
-from Product.serializers import (
-    ProductModelSerializer, ElementsModelSerializer,
-    CommentsModelSerializer, LikesModelSerializer,
-    CuisineModelSerializer, FavouriteModelSerializer
-)
+from Product.serializers import LikesModelSerializer
 
 
-class LikesView(APIView):
+class GetLikesView(APIView):
 
     def get(self, request):
         likes = Likes.objects.all()
@@ -23,13 +15,17 @@ class LikesView(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class PutLikesView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
 
         serializer = LikesModelSerializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
 
-        serializer.save()
+        serializer.save(user=request.user)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -42,6 +38,8 @@ class LikesDetailView(APIView):
         except Likes.DoesNotExist:
             return Response({"message": "Like does not exist"}, status=status.HTTP_404_NOT_FOUND)
         return likes
+
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, likes_id):
         self.get_likes_object(likes_id).delete()

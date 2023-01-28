@@ -7,13 +7,17 @@ from rest_framework import generics
 from Product.serializers import CommentsModelSerializer
 
 
-class CommentsView(APIView):
+class CommentsListView(APIView):
 
     def get(self, request):
-        comments = Comments.objects.all()
+        comments = Comments.objects.get()
         serializer = CommentsModelSerializer(comments)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CommentsCreateView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
 
@@ -21,7 +25,7 @@ class CommentsView(APIView):
 
         serializer.is_valid(raise_exception=True)
 
-        serializer.save()
+        serializer.save(user=request.user)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 

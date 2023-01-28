@@ -1,18 +1,10 @@
 from rest_framework.response import Response
-from Product.models import (
-    Elements,
-    Comments, Likes,
-    Favourite, Cuisine
-)
+from Product.models import Cuisine
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
-from Product.serializers import (
-    ProductModelSerializer, ElementsModelSerializer,
-    CommentsModelSerializer, LikesModelSerializer,
-    CuisineModelSerializer, FavouriteModelSerializer
-)
+from Product.serializers import CuisineModelSerializer
 
 
 class CuisineView(APIView):

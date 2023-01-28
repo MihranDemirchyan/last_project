@@ -8,11 +8,6 @@ from Users.serializers import UserSerializer
 
 
 class ProductModelSerializer(serializers.ModelSerializer):
-    # product_name = serializers.ReadOnlyField()
-    # users = serializers.ReadOnlyField()
-    # product_elements = serializers.ReadOnlyField()
-    # cuisine = serializers.ReadOnlyField()
-    # comments = serializers.CharField(read_only=True)
 
     class Meta:
         model = Product
@@ -45,13 +40,13 @@ class ElementsModelSerializer(serializers.ModelSerializer):
 
 
 class LikesModelSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Likes
         fields = "__all__"
 
 
 class CommentsModelSerializer(serializers.ModelSerializer):
-    # comments = serializers.ReadOnlyField()
 
     class Meta:
         model = Comments

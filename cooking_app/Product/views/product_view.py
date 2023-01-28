@@ -15,7 +15,7 @@ class ProductView(APIView):
 
     def get(self, request):
         print(request.user)
-        product_list = request.user.product_set.all()
+        product_list = Product.objects.all()
 
         serializer = ProductModelSerializer(product_list, many=True)
 
@@ -32,7 +32,7 @@ class ProductView(APIView):
 
 
 class ProductDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request, product_id):
         product = Product.objects.filter(id=product_id, user=request.user).first()
@@ -41,6 +41,7 @@ class ProductDetailView(APIView):
             return Response({"message": "not found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = ProductModelSerializer(product)
+        serializer.save(user=request.user)
 
         return Response(serializer.data)
 
@@ -66,4 +67,4 @@ class ProductDetailView(APIView):
 
         product.delete()
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status.HTTP_204_NO_CONTENT)

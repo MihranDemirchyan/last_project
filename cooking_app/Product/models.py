@@ -28,7 +28,7 @@ class Cuisine(models.Model):
 
 
 class Likes(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey("Product", on_delete=models.CASCADE)
 
 
@@ -42,7 +42,7 @@ class Comments(models.Model):
 
 
 class Favourite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     product = models.ManyToManyField("Product")
 
     def __str__(self):

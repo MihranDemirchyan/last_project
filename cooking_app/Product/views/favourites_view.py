@@ -4,13 +4,44 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework import generics
 from Product.serializers import FavouriteModelSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
-class FavouriteGenericView(generics.ListCreateAPIView):
-    queryset = Favourite.objects.all()
-    serializer_class = FavouriteModelSerializer
+class FavouriteListView(APIView):
+
+    def get(self, request):
+        favourites = Favourite.objects.get()
+        serializer = FavouriteModelSerializer(favourites)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class FavouriteDetailGenericView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Favourite.objects.all()
-    serializer_class = FavouriteModelSerializer
+class AddToFavouriteView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = FavouriteModelSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save(user=request.user)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class FavouritesDetailView(APIView):
+
+    def get_favourite(self, favourite_id):
+        try:
+            favs = Favourite.objects.get(id=favourite_id)
+        except Favourite.DoesNotExist:
+            return Response({"message": "There is not post like this"}, status=status.HTTP_404_NOT_FOUND)
+        return favs
+
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, favourite_id):
+        self.get_favourite(favourite_id).delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
