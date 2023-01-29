@@ -11,15 +11,19 @@ class ProductView(APIView):
     """
     endpoint will be products/
     """
-    permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request, product_id):
         print(request.user)
-        product_list = Product.objects.all()
+        product_list = Product.objects.filter(id=product_id)
 
         serializer = ProductModelSerializer(product_list, many=True)
 
         return Response(serializer.data)
+
+
+class ProductCreationView(APIView):
+
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = ProductModelSerializer(data=request.data)
@@ -32,16 +36,15 @@ class ProductView(APIView):
 
 
 class ProductDetailView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, product_id):
-        product = Product.objects.filter(id=product_id, user=request.user).first()
+        product = Product.objects.filter(id=product_id).first()
 
         if not product:
             return Response({"message": "not found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = ProductModelSerializer(product)
-        serializer.save(user=request.user)
 
         return Response(serializer.data)
 

@@ -9,6 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 
 class FavouriteListView(APIView):
 
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         favourites = Favourite.objects.get()
         serializer = FavouriteModelSerializer(favourites)
@@ -31,17 +33,12 @@ class AddToFavouriteView(APIView):
 
 
 class FavouritesDetailView(APIView):
-
-    def get_favourite(self, favourite_id):
-        try:
-            favs = Favourite.objects.get(id=favourite_id)
-        except Favourite.DoesNotExist:
-            return Response({"message": "There is not post like this"}, status=status.HTTP_404_NOT_FOUND)
-        return favs
-
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, favourite_id):
-        self.get_favourite(favourite_id).delete()
+        try:
+            Favourite.objects.get(id=favourite_id).delete()
+        except Favourite.DoesNotExist:
+            return Response({"message": "There is not post like this"}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(status=status.HTTP_204_NO_CONTENT)

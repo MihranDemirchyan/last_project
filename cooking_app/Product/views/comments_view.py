@@ -3,7 +3,6 @@ from Product.models import Comments
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
 from Product.serializers import CommentsModelSerializer
 
 

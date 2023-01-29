@@ -34,9 +34,9 @@ class ElementsModelSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     # def to_representation(self, instance):
-    #     data = super().to_representation(instance)
-    #     print(data)
-    #     data["product_elements"] = instance.products.data
+    #     return {
+    #         "name": instance.name
+    #     }
 
 
 class LikesModelSerializer(serializers.ModelSerializer):

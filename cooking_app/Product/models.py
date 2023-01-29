@@ -1,7 +1,6 @@
 from django.db import models
 
 from django.contrib.auth.models import User
-from rest_framework import request
 
 
 class Product(models.Model):
@@ -9,7 +8,6 @@ class Product(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     cuisine = models.ForeignKey("Cuisine", on_delete=models.CASCADE, null=True)
     product_elements = models.ManyToManyField("Elements")
-    # comments = models.ForeignKey("Comments",on_delete=models.PROTECT, null=True)
 
     def __str__(self):
         return f"{self.user}"
@@ -35,7 +33,7 @@ class Likes(models.Model):
 class Comments(models.Model):
     comment = models.TextField(null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    product = models.ManyToManyField("Product")
+    product = models.ForeignKey("Product", on_delete=models.PROTECT, null=True)  # TODO change to ForeignKey
 
     def __str__(self):
         return f"{self.comment}"
@@ -43,7 +41,7 @@ class Comments(models.Model):
 
 class Favourite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    product = models.ManyToManyField("Product")
+    product = models.ForeignKey("Product", on_delete=models.PROTECT, null=True)  # TODO change to ForeignKey
 
     def __str__(self):
         return f"{self.user}"

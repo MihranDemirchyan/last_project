@@ -8,7 +8,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ("id", "email", "username", "password")
 
     def validate_password(self, value: str) -> str:
+
         return make_password(value)
