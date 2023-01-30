@@ -3,7 +3,6 @@ from Product.models import Likes
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
 from Product.serializers import LikesModelSerializer
 
 
@@ -12,7 +11,7 @@ class GetProductLikesView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, product_id):
-        likes = Likes.objects.all()
+        likes = Likes.objects.filter(id=product_id)
         serializer = LikesModelSerializer(likes, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)

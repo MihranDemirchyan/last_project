@@ -7,9 +7,10 @@ from Product.serializers import CommentsModelSerializer
 
 
 class CommentsListView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        comments = Comments.objects.get()
+    def get(self, request, product_id):
+        comments = Comments.objects.get(id=product_id)
         serializer = CommentsModelSerializer(comments)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
